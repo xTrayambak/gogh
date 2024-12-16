@@ -3,6 +3,7 @@
 #include <LTimer.h>
 #include <LGlobal.h>
 #include <LClient.h>
+#include <LLog.h>
 
 #include "Compositor.h"
 #include "Output.h"
@@ -55,14 +56,7 @@ void Compositor::initialized()
         output->repaint();
     }
 
-    /* Sets a background wallpaper using swaybg */;
-    LLauncher::launch(std::string("swaybg -m fill -i ") + (compositor()->defaultAssetsPath() / "wallpaper.png").string());
-
-    /* Launches Waybar */;
-    LLauncher::launch("waybar");
-
-    /* Launches some bottom panel */
-    LLauncher::launch("sfwbar");
+    LLauncher::launch("foot zsh");
 }
 
 void Compositor::uninitialized()
@@ -74,13 +68,34 @@ void Compositor::uninitialized()
     systemd.reset();
 }
 
+void Compositor::relayout()
+{
+	/* This is triggered every time a new surface global is created or destroyed,
+	 * in order to trigger a layout re-calculation. The function is oblivious
+	 * as to which surface was just initialized, but it really doesn't need to
+	 * know anyways. */
+	LLog::log("New surface added! Woo!");
+
+	int nSurface = -1;
+	
+	for (LSurface *surface : surfaces())
+	{
+		nSurface++;
+
+		LLog::log("Surface #%i: w=%i, h=%i", nSurface, surface->size().w(), surface->size().h());
+	}
+}
+
 LFactoryObject *Compositor::createObjectRequest(LFactoryObject::Type objectType, const void *params)
 {
     if (objectType == LFactoryObject::Type::LOutput)
         return new Output(params);
 
     if (objectType == LFactoryObject::Type::LClient)
+    {
+	relayout();
         return new Client(params);
+    }
 
     if (objectType == LFactoryObject::Type::LSurface)
         return new Surface(params);
@@ -133,6 +148,11 @@ void Compositor::onAnticipatedObjectDestruction(LFactoryObject *object)
     if (object->factoryObjectType() == LFactoryObject::Type::LClient)
     {
         /* Bye bye client */
+    }
+
+    if (object->factoryObjectType() == LFactoryObject::Type::LSurface)
+    {
+	    relayout();
     }
 
     /* Do not delete the object! */

@@ -37,7 +37,8 @@ protected:
     /* If you want to add/remove protocol globals */
     bool createGlobalsRequest() override;
 
+    void relayout();
+
     /* Controls which client can bind to which global */
     bool globalsFilter(LClient *client, LGlobal *global) override;
-
 };

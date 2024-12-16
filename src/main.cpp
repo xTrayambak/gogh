@@ -48,6 +48,8 @@ int main(int, char *[])
 
     Compositor compositor;
 
+    LLog::init();
+
     /* You can load a custom input and graphics backend here. For more details, see the LCompositor documentation.
      * By default, if the WAYLAND_DISPLAY environment variable is set, the Wayland backends will be loaded,
      * otherwise, if launched from a free TTY, the DRM and Libinput backends will be used.*/

@@ -1,6 +1,10 @@
 #include <LScreenshotRequest.h>
 #include <LSessionLockRole.h>
+#include <LLog.h>
+#include <LPainter.h>
+#include <LOpenGL.h>
 #include <LAnimation.h>
+#include <stdexcept>
 #include "Compositor.h"
 #include "Output.h"
 #include "Surface.h"
@@ -37,6 +41,21 @@ void Output::initializeGL()
         if (weakRef)
             weakRef->fadeInView.setParent(nullptr);
     });
+
+    static char *frag = LOpenGL::openShader("../src/shaders/shader.frag");
+    static char *vert = LOpenGL::openShader("../src/shaders/shader.vert");
+
+    if (frag == nullptr)
+	throw std::runtime_error("Failed to load fragment shader!");
+
+    if (vert == nullptr)
+	throw std::runtime_error("Failed to load vertex shader!");
+
+    LLog::log("Fragment shader: %s", frag);
+    LLog::log("Vertex shader: %s", vert);
+
+    LPainter::imp()->vertexShader = LOpenGL::compileShader(GL_VERTEX_SHADER, vert);
+    LPainter::imp()->fragmentShader = LOpenGL::compileShader(GL_FRAGMENT_SHADER, frag);
 }
 
 void Output::paintGL()
@@ -51,7 +70,7 @@ void Output::paintGL()
          * This hint can be passed to outputs to optimize content display.
          * For example, if the content type is "Game", a TV plugged in via HDMI may try to reduce latency.
          */
-        setContentType(fullscreenSurface->contentType());
+        // setContentType(fullscreenSurface->contentType());
 
         /*
          * V-SYNC
@@ -72,7 +91,7 @@ void Output::paintGL()
          * Note: Oversampling is unnecessary and always disabled when using integer scales. Therefore, it's recommended to stick with integer scales
          * and select an appropriate LOutputMode that suits your requirements.
          */
-        enableFractionalOversampling(false);
+        // enableFractionalOversampling(false);
 
         /*
          * Direct Scanout
@@ -82,13 +101,13 @@ void Output::paintGL()
          * notifications (as these won't be displayed), or screenshot requests which are always denied.
          * Refer to LOutput::setCustomScanoutBuffer() for more information.
          */
-        if (tryDirectScanout(fullscreenSurface))
-            return; // On success, avoid doing any rendering.
+        /* if (tryDirectScanout(fullscreenSurface))
+            return; // On success, avoid doing any rendering. */
     }
     else
     {
-        setContentType(LContentTypeNone);
-        enableFractionalOversampling(true);
+        // setContentType(LContentTypeNone);
+        // enableFractionalOversampling(true);
     }
 
     /* Let our scene do its magic */
@@ -150,25 +169,5 @@ Surface *Output::searchFullscreenSurface() const noexcept
 
 bool Output::tryDirectScanout(Surface *surface) noexcept
 {
-    if (!surface || !surface->mapped() ||
-
-        /* Ensure there is no overlay content.
-         * TODO: Check if there are overlay layer-shell surfaces
-         * such as notifications */
-        surface->hasMappedChildSurface() ||
-
-        /* Screenshot requests are denied when there is a custom scanout buffer */
-        !screenshotRequests().empty() ||
-
-        /* Hardware cursor planes can still be displayed on top */
-        (cursor()->visible() && !cursor()->hwCompositingEnabled(this)))
-        return false;
-
-    const bool ret { setCustomScanoutBuffer(surface->texture()) };
-
-    /* Ask the surface to continue updating */
-    if (ret)
-        surface->requestNextFrame();
-
-    return ret;
+    return false;
 }
