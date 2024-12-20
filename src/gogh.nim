@@ -1,6 +1,7 @@
 import std/[os, logging]
-import pkg/[colored_logger, louvre]
+import pkg/[colored_logger]
 import pkg/cppstl/std_smartptrs
+import louvre
 import ./compositor
 
 type
@@ -9,6 +10,10 @@ type
 proc main {.inline.} =
   putEnv("LOUVRE_DEBUG", "4")
   putEnv("LOUVRE_WAYLAND_DISPLAY", "wayland-2")
+  putEnv("XDG_CURRENT_DESKTOP", "gogh")
+  putEnv("XDG_SESSION_TYPE", "wayland")
+  putEnv("GDK_BACKEND", "wayland")
+  putEnv("SDL_VIDEODRIVER", "wayland")
   addHandler(newColoredLogger())
 
   var gogh = makeUnique(Gogh)

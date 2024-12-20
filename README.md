@@ -13,7 +13,7 @@ Gogh will try to:
 # Roadmap
 Keep in mind that things might be slow to progress because I'm working on my [Louvre bindings](https://github.com/xTrayambak/nim-louvre) simultaneously as this compositor's being worked on.
 - Get stuff rendering [X]
-- Dwindle layout [ ]
+- Tiling layout [ ]
 - Shaders for fancy effects like blurring [ ]
 - Animations and transitions [ ]
 - Touch gestures [ ]
