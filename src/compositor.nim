@@ -1,13 +1,12 @@
 import std/[os, logging, random, tables]
 import louvre
-import pkg/pretty
-import ./[sugar, layout]
+import pkg/[vmath, pretty]
+import ./[sugar]
 
 {.pragma: immutable, codegenDecl: "const $1 $2".}
 
 type
   Gogh* = object of Compositor
-    layout*: Layout
 
 proc initialized(gogh: ptr Gogh) {.virtual.} =
   info "gogh: initialized!"
@@ -23,35 +22,24 @@ proc initialized(gogh: ptr Gogh) {.virtual.} =
 
   var outputs = comp[].getOutputs()
   assert(outputs.len > 0, "No outputs initialized.")
-  gogh.layout.output = outputs[0] # TODO: multi-output support
 
-proc layoutSurfaces(compositor: ptr Gogh) =
-  var comp = cast[ptr Compositor](compositor)
-  var surfaces = comp[].getSurfaces()
-  var numIdMap: Table[int, int]
-  
-  for i, pSurface in surfaces:
-    let role = pSurface[].getRoleId()
-    echo role
+  launchCommand("foot")
 
-    if role == SurfaceRole.Toplevel:
-      let id = compositor.layout.add(pSurface)
-      numIdMap[i] = id
-
-  print numIdMap
-
-  compositor.layout.compute()
-
-  #[for i, pSurface in surfaces:
-    if not numIdMap.contains(i):
+proc surfaceCreationCallback(compositor: ptr Gogh) =
+  for surface in Compositor(compositor[]).getSurfaces():
+    let outputs = surface.getOutputs()
+    if outputs.len < 1:
+      warn "gogh: surface appears on no outputs!"
       continue
 
-    let pos = compositor.layout.getPosition(numIdMap[id]) # LPoint
-    pSurface.position = pos]#
+    let size = outputs[0][].getSize()
+
+    surface.raiseSurface()
+    surface.resize(size)
 
 proc createObjectRequest(compositor: ptr Gogh, objectType: FactoryObjectType, params {.immutable.}: pointer): ptr FactoryObject {.virtual.} =
-  debug "gogh: createObjectRequest(): typ = " & $objectType
+  # debug "gogh: createObjectRequest(): typ = " & $objectType
   if objectType == LSurface:
-    compositor.layoutSurfaces()
+    compositor.surfaceCreationCallback()
 
   return nil

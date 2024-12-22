@@ -15,6 +15,7 @@ proc main {.inline.} =
   putEnv("GDK_BACKEND", "wayland")
   putEnv("SDL_VIDEODRIVER", "wayland")
   addHandler(newColoredLogger())
+  startLaunchDaemon()
 
   var gogh = makeUnique(Gogh)
   
@@ -25,6 +26,7 @@ proc main {.inline.} =
     gogh.processLoop(-1)
 
   info "Exiting compositor..."
+  stopLaunchDaemon()
 
 when isMainModule:
   main()
