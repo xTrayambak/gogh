@@ -12,15 +12,15 @@ type
 
 proc evaluateConfig(gogh: ptr Gogh) =
   debug "gogh: evaluating config"
-  for cmd in globals.conf.startup.exec:
+  for cmd in getConfig().startup.exec:
     debug "gogh: executing startup command: " & cmd
     launchCommand(cmd)
 
 proc initialized(gogh: ptr Gogh) {.virtual.} =
   info "gogh: initialized!"
   gogh.scene.addr.getMainView().clearColor = rgba(0, 0, 0, 1)
-  globals.conf = loadConfig()
-  print globals.conf
+  loadConfig().setConfig()
+  print getConfig()
 
   var comp = (ptr Compositor)gogh
   info "gogh: using Louvre " & $comp[].getVersion()
@@ -47,8 +47,10 @@ proc initialized(gogh: ptr Gogh) {.virtual.} =
     info "gogh: Name: " & pOutput[].name
     info "gogh: Manufacturer: " & pOutput[].manufacturer
     info "gogh: Description: " & pOutput[].description
+
+    let config = getConfig()
     
-    if i < globals.conf.displays.len - 1:
+    if i < config.displays.len - 1:
       info "gogh: monitor has no user-specified configuration for it."
       
       #[ if pOutput[].preferVSync:
@@ -56,13 +58,13 @@ proc initialized(gogh: ptr Gogh) {.virtual.} =
         pOutput.vsync = true ]#
     else:
       debug "gogh: monitor has user-specified configuration for it."
-      let config = globals.conf.displays[i]
+      let displayConfig = config.displays[i]
       
-      if not config.forceVsync:
-        debug "gogh: setting refresh rate for output #" & $i & " to " & $config.refreshRate & "Hz"
-        pOutput.refreshRateLimit = config.refreshRate.int32
+      if not displayConfig.forceVsync:
+        debug "gogh: setting refresh rate for output #" & $i & " to " & $displayConfig.refreshRate & "Hz"
+        pOutput.refreshRateLimit = displayConfig.refreshRate.int32
 
-        pOutput.vsync = config.refreshRate <= 60'u16
+        pOutput.vsync = displayConfig.refreshRate <= 60'u16
       else:
         debug "gogh: user has explicitly asked for this output to be force-VSync'd"
         pOutput.vsync = true

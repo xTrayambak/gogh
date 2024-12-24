@@ -1,5 +1,6 @@
 import std/[os, logging]
 import pkg/yaml
+import ./keybind
 
 type
   StartupConfig* = object
@@ -13,6 +14,11 @@ type
   Config* = object
     startup*: StartupConfig
     displays*: seq[MonitorConfig]
+    binds: seq[KeybindRaw]
+
+func binds*(config: Config): seq[Keybind] =
+  for binding in config.binds:
+    result &= binding.toKeybind()
 
 proc getGoghConfigDir*: string {.inline.} =
   let dir = getConfigDir() / "gogh"

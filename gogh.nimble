@@ -20,3 +20,4 @@ requires "yaml >= 2.1.1"
 
 task genXkbcommon, "Generate Nim code for libxkbcommon keysyms":
   exec "c2nim src/libxkbcommon/keysyms.c -o:src/libxkbcommon/keysyms.nim"
+  exec "c2nim src/libxkbcommon/evdev_scancodes.c -o:src/libxkbcommon/evdev_scancodes.nim"
