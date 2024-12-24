@@ -16,3 +16,7 @@ requires "colored_logger >= 0.1.0"
 requires "pretty >= 0.2.0"
 
 requires "vmath >= 2.0.0"
+requires "yaml >= 2.1.1"
+
+task genXkbcommon, "Generate Nim code for libxkbcommon keysyms":
+  exec "c2nim src/libxkbcommon/keysyms.c -o:src/libxkbcommon/keysyms.nim"

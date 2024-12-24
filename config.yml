@@ -1,0 +1,10 @@
+startup:
+  exec:
+    - swww init
+    - swww img ~/.wallpapers/4k-Purple-MacBook-Pro-4K-Wallpaper.jpg
+    - waybar
+    - foot
+
+displays:
+  - refresh_rate: 144
+    force_vsync: false

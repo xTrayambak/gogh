@@ -1,5 +1,14 @@
 proc cppNew*[T](x: typedesc[T]): ptr T {.importcpp: "(new '*0#@)", nodecl.}
 
+const FactoryDerivation* = """
+class $1 final : public $3
+{
+  public:
+    $1(const void *params) : $3(params) {}
+    $2
+};
+""" ## Derivation template. All factory objects you create that derive from Louvre factory objects must use this as the attribute for `codegenDecl` in order to generate correct code. 
+
 # Stolen from https://scripter.co/binding-nim-to-c-plus-plus-std-list/
 # because I'm too lazy to bind it myself
 type

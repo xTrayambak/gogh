@@ -21,6 +21,8 @@ func outputs*(compositor: Compositor): CppVector[ptr Output] {.importcpp: "Louvr
 func getSeat*(compositor: Compositor): ptr Seat {.importcpp: "Louvre::LCompositor::seat".}
 proc surfaces(compositor: Compositor): List[ptr Surface] {.importcpp: "Louvre::LCompositor::surfaces".}
 
+proc getCompositor*(): ptr Compositor {.importcpp: "Louvre::compositor".}
+
 proc start*(compositor: var Compositor): bool {.importcpp: "Louvre::LCompositor::start".}
 proc processLoop*(compositor: var Compositor, msTimeout: int32) {.importcpp: "Louvre::LCompositor::processLoop".}
 
@@ -30,8 +32,16 @@ proc createObjectRequest*(
   objectType: FactoryObjectType,
   params: pointer
 ): ptr FactoryObject {.importcpp: "Louvre::LCompositor::createObjectRequest".}
+proc addOutputInternal(compositor: ptr Compositor, output: ptr Output): bool {.importcpp: "Louvre::LCompositor::addOutput".}
 
 {.pop.}
+
+type
+  CompositorError* = object of CatchableError
+    ## Any catchable error related to the compositor stems from this exception
+
+  CannotAddOutput* = object of CompositorError
+    ## Raised when `addOutput` fails to add an output to the compositor's list.
 
 proc getSurfaces*(compositor: Compositor): seq[ptr Surface] {.inline.} =
   compositor
@@ -42,3 +52,7 @@ func getOutputs*(compositor: Compositor): seq[ptr Output] {.inline.} =
   compositor
     .outputs()
     .toSeq()
+
+proc addOutput*(compositor: ptr Compositor, output: ptr Output) {.inline, raises: [CannotAddOutput].} =
+  if not compositor.addOutputInternal(output):
+    raise newException(CannotAddOutput, "Failed to add output to compositor's registry.")

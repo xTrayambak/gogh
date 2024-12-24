@@ -14,6 +14,17 @@ Gogh will try to:
 - Use POSIX APIs, not the shell
 - Not require a C++ compiler as an optional runtime dependency
 
+# Configuration
+Gogh is configured with YAML. It can't be configured a lot right now, here's a basic configuration that launches a few things:
+```yaml
+startup:
+  exec:
+    - swww init
+    - swww img ~/.wallpapers/wallpaper.png
+    - waybar
+    - foot
+```
+
 # Roadmap
 Keep in mind that things might be slow to progress because I'm working on my [Louvre bindings](https://github.com/xTrayambak/nim-louvre) simultaneously as this compositor's being worked on.
 - Get stuff rendering [X]

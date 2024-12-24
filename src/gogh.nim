@@ -14,6 +14,7 @@ proc main {.inline.} =
   putEnv("XDG_SESSION_TYPE", "wayland")
   putEnv("GDK_BACKEND", "wayland")
   putEnv("SDL_VIDEODRIVER", "wayland")
+
   addHandler(newColoredLogger())
   startLaunchDaemon()
 

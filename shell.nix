@@ -7,6 +7,8 @@ mkShell {
     wayland
     pixman
     libGL
+    libxkbcommon
+    c2nim
     libdrm
   ];
 
@@ -16,5 +18,6 @@ mkShell {
     pixman
     libGL
     libdrm
+    libxkbcommon
   ];
 }

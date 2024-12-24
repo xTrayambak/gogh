@@ -37,10 +37,10 @@ func preferVSync*(surf: Surface): bool {.importcpp: "Louvre::LSurface::preferVSy
 proc resize*(surf: ptr Surface, size: Size) {.inline.} =
   ## Asks the surface to resize its toplevel
   ## **NOTE**: This is merely a suggestion, the client can choose to ignore this request.
+  ## **NOTE**: If a surface has no toplevel, this request will fail silently.
   debug "surface: resizing to " & $size & " (getting toplevel)"
   var toplevel = surf.getToplevel()
   if toplevel == nil:
-    warn "surface: cannot resize as toplevel is NULL!"
     return
 
   toplevel.configureSize(size)
