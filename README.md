@@ -25,6 +25,18 @@ startup:
     - foot
 ```
 
+## Setting up keybinds
+Keybinds can currently on be set up to execute commands.
+Dispatch commands will be implemented soon.
+```yaml
+binds:
+    - keys: "Super + T"
+      exec: foot
+
+    - keys: "Super - Alt + T" # Use `-` to guide the parser into parsing the next item as the modifier
+      exec: notify-send "Hi there"
+```
+
 # Roadmap
 Keep in mind that things might be slow to progress because I'm working on my [Louvre bindings](https://github.com/xTrayambak/nim-louvre) simultaneously as this compositor's being worked on.
 - Get stuff rendering [X]
