@@ -11,15 +11,12 @@ type
     cachedKeybinds*: Option[seq[Keybind]]
 
 proc keyEvent*(kb: ptr GoghKeyboard, event {.immutable.}: var KeyboardKeyEvent) {.virtual.} =
-  let keyCode = event.keyCode()
   var keyboard = cast[ptr Keyboard](kb)
   
   var binds = if *kb.cachedKeybinds:
     &kb.cachedKeybinds
   else:
     getConfig().binds
-
-  print binds
 
   let pressed = kb[].pressedKeys()
 
