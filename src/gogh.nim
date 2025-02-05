@@ -13,6 +13,7 @@ proc main {.inline.} =
   putEnv("XDG_CURRENT_DESKTOP", "gogh")
   putEnv("XDG_SESSION_TYPE", "wayland")
   putEnv("GDK_BACKEND", "wayland")
+  putEnv("QT_QPA_PLATFORM", "wayland")
   putEnv("SDL_VIDEODRIVER", "wayland")
 
   addHandler(newColoredLogger())

@@ -80,6 +80,8 @@ func strToKey(str: string): uint32 {.raises: [InvalidKeybind].} =
     return KEY_SUPER_L
   of "alt":
     return KEY_ALT_L
+  of "printscreen", "print", "prtscr":
+    return KEY_PRINT
   else:
     return KEY_ALT_L
 

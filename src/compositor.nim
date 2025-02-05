@@ -18,7 +18,6 @@ proc evaluateConfig(gogh: ptr Gogh) =
 
 proc initialized(gogh: ptr Gogh) {.virtual.} =
   info "gogh: initialized!"
-  gogh.scene.addr.getMainView().clearColor = rgba(0, 0, 0, 1)
   loadConfig().setConfig()
   print getConfig()
 
@@ -26,6 +25,7 @@ proc initialized(gogh: ptr Gogh) {.virtual.} =
   info "gogh: using Louvre " & $comp[].getVersion()
 
   globals.scene = gogh.scene.addr
+  gogh.scene.addr.getMainView().clearColor = rgba(1, 1, 1, 1)
 
   var seat = comp[].getSeat()[].getName()
   info "gogh: seat identifier: " & seat
@@ -39,9 +39,9 @@ proc initialized(gogh: ptr Gogh) {.virtual.} =
   debug "gogh: initializing all outputs"
   var totalWidth: int
   for i, pOutput in outputs:
-    #[ if pOutput[].isNonDesktop:
+    if pOutput[].isNonDesktop:
       pOutput.leasable = true
-      continue ]#
+      continue
 
     info "gogh: Monitor #" & $i
     info "gogh: Name: " & pOutput[].name
@@ -74,13 +74,15 @@ proc initialized(gogh: ptr Gogh) {.virtual.} =
     totalWidth += pOutput[].size.x()
 
     try:
+      info "gogh: adding output " & $i
       comp.addOutput(pOutput)
     except louvre.CannotAddOutput as exc:
       error "gogh: " & exc.msg
     
-    debug "gogh: forcing output to repaint itself"
+    debug "gogh: forcing output " & $i & " to repaint itself"
     pOutput.repaint()
-  
+    gogh.scene.addr.getMainView().damageAll(pOutput)
+
   gogh.evaluateConfig()
 
 proc surfaceCreationCallback(compositor: ptr Gogh) =
