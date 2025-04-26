@@ -1,6 +1,6 @@
 # Package
 
-version = "0.1.0"
+version = "0.1.1"
 author = "xTrayambak"
 description = "A neat Wayland compositor written in Nim"
 license = "GPL-3.0-or-later"
