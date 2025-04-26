@@ -14,8 +14,7 @@ type
     keys*: string
     exec*: Option[string]
 
-  Keybind* = object
-    ## e.g for Super - Shift + T
+  Keybind* = object ## e.g for Super - Shift + T
     keyMain: string ## Super
     keyMod: Option[string] ## Shift
     key: Option[char] ## T
@@ -100,7 +99,7 @@ proc parseKeybind*(keys: string): Keybind =
   var kb: Keybind
   var kmod: string
   var state = kpsParseMain
-  
+
   for c in keys:
     if c in strutils.Whitespace:
       continue
@@ -120,7 +119,7 @@ proc parseKeybind*(keys: string): Keybind =
     of kpsParseKey:
       kb.key = some(c)
       break
-  
+
   if kmod.len > 0:
     kb.keyMod = some(move(kmod))
 

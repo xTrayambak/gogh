@@ -8,10 +8,10 @@ var confGuard: Lock
 initLock(confGuard)
 var conf {.guard: confGuard.}: Config
 
-proc setConfig*(config: sink Config) =
+proc setConfig*(config: Config) =
   withLock confGuard:
-    conf = move(config)
+    conf = config
 
-proc getConfig*: Config =
+proc getConfig*(): Config =
   withLock confGuard:
     return conf

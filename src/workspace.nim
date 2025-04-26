@@ -1,4 +1,3 @@
 import louvre
 
-type
-  Workspace* = object of LayerView
+type Workspace* = object of LayerView

@@ -225,8 +225,7 @@
 ##  Key symbols (keysyms) definitions.
 ##
 
-const
-  XKB_KEY_NoSymbol* = 0x000000
+const XKB_KEY_NoSymbol* = 0x000000
 
 ## *********************************************************
 ## Copyright 1987, 1994, 1998  The Open Group
@@ -417,8 +416,7 @@ const
 ##  should be moved after the new canonical name.
 ##
 
-const
-  XKB_KEY_VoidSymbol* = 0xffffff
+const XKB_KEY_VoidSymbol* = 0xffffff
 
 ##
 ##  TTY function keys, cleverly chosen to map to ASCII, for convenience of
@@ -2112,8 +2110,7 @@ const
 
 ##  Korean currency symbol
 
-const
-  XKB_KEY_Korean_Won* = 0x0eff
+const XKB_KEY_Korean_Won* = 0x0eff
 
 ##
 ##  Armenian
@@ -2814,8 +2811,7 @@ const
 ##  functionality.
 ##
 
-const
-  XKB_KEY_XF86ModeLock* = 0x1008ff01
+const XKB_KEY_XF86ModeLock* = 0x1008ff01
 
 ##  Backlight controls.
 
@@ -3089,8 +3085,7 @@ const
 ##  Use: XKB_KEY_XF86RFKill                   _EVDEVK(0x0f7)     v2.6.33 KEY_RFKILL
 ##  Use: XKB_KEY_XF86AudioMicMute             _EVDEVK(0x0f8)     v3.1    KEY_MICMUTE
 
-const
-  XKB_KEY_XF86Info* = 0x10081166
+const XKB_KEY_XF86Info* = 0x10081166
 
 ##  Use: XKB_KEY_XF86CycleAngle               _EVDEVK(0x173)             KEY_ANGLE
 ##  Use: XKB_KEY_XF86FullScreen               _EVDEVK(0x174)     v5.1    KEY_FULL_SCREEN
@@ -3117,13 +3112,11 @@ const
 ##  Use: XKB_KEY_XF86ZoomIn                   _EVDEVK(0x1a2)     v2.6.20 KEY_ZOOMIN
 ##  Use: XKB_KEY_XF86ZoomOut                  _EVDEVK(0x1a3)     v2.6.20 KEY_ZOOMOUT
 
-const
-  XKB_KEY_XF86ZoomReset* = 0x100811a4
+const XKB_KEY_XF86ZoomReset* = 0x100811a4
 
 ##  Use: XKB_KEY_XF86Word                     _EVDEVK(0x1a5)     v2.6.20 KEY_WORDPROCESSOR
 
-const
-  XKB_KEY_XF86Editor* = 0x100811a6
+const XKB_KEY_XF86Editor* = 0x100811a6
 
 ##  Use: XKB_KEY_XF86Excel                    _EVDEVK(0x1a7)     v2.6.20 KEY_SPREADSHEET
 
@@ -3495,8 +3488,7 @@ const
 
 ##  special keysym for LK2** "Remove" key on editing keypad
 
-const
-  XKB_KEY_DRemove* = 0x1000ff00
+const XKB_KEY_DRemove* = 0x1000ff00
 
 ##
 ##

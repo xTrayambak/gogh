@@ -6,17 +6,19 @@ import pretty
 
 {.pragma: immutable, codegenDecl: "const $1 $2".}
 
-type
-  GoghKeyboard* {.codegenDecl: FactoryDerivation.} = object of Keyboard
-    cachedKeybinds*: Option[seq[Keybind]]
+type GoghKeyboard* {.codegenDecl: FactoryDerivation.} = object of Keyboard
+  cachedKeybinds*: Option[seq[Keybind]]
 
-proc keyEvent*(kb: ptr GoghKeyboard, event {.immutable.}: var KeyboardKeyEvent) {.virtual.} =
+proc keyEvent*(
+    kb: ptr GoghKeyboard, event {.immutable.}: var KeyboardKeyEvent
+) {.virtual.} =
   var keyboard = cast[ptr Keyboard](kb)
-  
-  var binds = if *kb.cachedKeybinds:
-    &kb.cachedKeybinds
-  else:
-    getConfig().binds
+
+  var binds =
+    if *kb.cachedKeybinds:
+      &kb.cachedKeybinds
+    else:
+      getConfig().binds
 
   let pressed = kb[].pressedKeys()
 
