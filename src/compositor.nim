@@ -1,6 +1,5 @@
 import std/[algorithm, os, logging, sequtils]
-import louvre
-import pkg/[vmath, pretty]
+import pkg/[vmath, pretty, louvre, opengl]
 import ./[output, keyboard]
 import ./[sugar, globals, config]
 

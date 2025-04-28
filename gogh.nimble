@@ -17,7 +17,7 @@ requires "pretty >= 0.2.0"
 requires "vmath >= 2.0.0"
 requires "yaml >= 2.1.1"
 requires "opengl >= 1.2.9"
-requires "louvre >= 2.16.3.1"
+requires "louvre#master" #2.16.3.1"
 requires "libbacktrace >= 0.0.8"
 
 task genXkbcommon, "Generate Nim code for libxkbcommon keysyms":
