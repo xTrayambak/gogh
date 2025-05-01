@@ -1,6 +1,6 @@
 import std/[strutils, options]
 import libxkbcommon/evdev_scancodes
-import pkg/pretty
+import pkg/[yaml, pretty]
 import ./sugar
 
 type
@@ -9,17 +9,25 @@ type
     kpsParseMain
     kpsParseMod
     kpsParseKey
+  
+  KeybindKind* = enum
+    kkExec = "exec"
+    kkDispatch = "dispatch"
 
   KeybindRaw* = object
     keys*: string
-    exec*: Option[string]
+    kind*: KeybindKind
+    exec*: string
+    dispatch*: string
 
   Keybind* = object ## e.g for Super - Shift + T
     keyMain: string ## Super
     keyMod: Option[string] ## Shift
     key: Option[char] ## T
-
-    exec*: Option[string]
+    
+    kind*: KeybindKind
+    exec*: string
+    dispatch*: string
 
 func strToKey(str: string): uint32 {.raises: [InvalidKeybind].} =
   case str.toLowerAscii()
@@ -128,5 +136,7 @@ proc parseKeybind*(keys: string): Keybind =
 proc toKeybind*(raw: KeybindRaw): Keybind =
   var kb = raw.keys.parseKeybind()
   kb.exec = raw.exec
+  kb.dispatch = raw.dispatch
+  kb.kind = raw.kind
 
   move kb

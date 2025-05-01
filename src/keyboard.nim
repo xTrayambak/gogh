@@ -1,13 +1,22 @@
-import std/[options]
-import louvre
+import std/[atomics, options]
+import pkg/[louvre, pretty]
 import libxkbcommon/evdev_scancodes
 import ./[globals, keybind, sugar, config]
-import pretty
 
 {.pragma: immutable, codegenDecl: "const $1 $2".}
 
 type GoghKeyboard* {.codegenDecl: FactoryDerivation.} = object of Keyboard
   cachedKeybinds*: Option[seq[Keybind]]
+
+proc handleDispatchCmd(keyboard: ptr GoghKeyboard, cmd: string) =
+  case cmd
+  of "kill-focused-window":
+    let surface = globals.focusedSurface.load()
+    if surface == nil:
+      return
+
+    surface.requestExit()
+  else: discard
 
 proc keyEvent*(
     kb: ptr GoghKeyboard, event {.immutable.}: var KeyboardKeyEvent
@@ -33,7 +42,7 @@ proc keyEvent*(
     if *binding.key and &binding.key notin pressed:
       continue
 
-    activatedBinding = some(deepCopy(binding))
+    activatedBinding = some(binding)
     break
 
   kb.cachedKeybinds = some(move(binds))
@@ -45,5 +54,8 @@ proc keyEvent*(
     # TODO: refactor this into another file
     let activated = &activatedBinding
 
-    if *activated.exec:
-      launchCommand(&activated.exec)
+    case activated.kind
+    of kkExec:
+      launchCommand(activated.exec)
+    of kkDispatch:
+      handleDispatchCmd(kb, activated.dispatch)
