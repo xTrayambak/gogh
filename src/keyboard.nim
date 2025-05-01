@@ -16,7 +16,8 @@ proc handleDispatchCmd(keyboard: ptr GoghKeyboard, cmd: string) =
       return
 
     surface.requestExit()
-  else: discard
+  else:
+    discard
 
 proc keyEvent*(
     kb: ptr GoghKeyboard, event {.immutable.}: var KeyboardKeyEvent

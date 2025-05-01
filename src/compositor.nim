@@ -113,7 +113,7 @@ proc tile(gogh: ptr Gogh) =
 
     let masterOutput = masterOutputs[0]
     let masterSize = masterOutput[].size().x.float * 0.6
-    
+
     # Make the master occupy
     master.resize(
       point(masterSize.int32, int32(masterOutput[].size.y.float - (2f * borderSpace)))

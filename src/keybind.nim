@@ -9,7 +9,7 @@ type
     kpsParseMain
     kpsParseMod
     kpsParseKey
-  
+
   KeybindKind* = enum
     kkExec = "exec"
     kkDispatch = "dispatch"
@@ -24,7 +24,7 @@ type
     keyMain: string ## Super
     keyMod: Option[string] ## Shift
     key: Option[char] ## T
-    
+
     kind*: KeybindKind
     exec*: string
     dispatch*: string
