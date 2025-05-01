@@ -1,6 +1,6 @@
 import std/[algorithm, os, logging, sequtils]
 import pkg/[vmath, pretty, louvre, opengl]
-import ./[output, keyboard]
+import ./[output, keyboard, pointer]
 import ./[sugar, globals, config]
 
 {.pragma: immutable, codegenDecl: "const $1 $2".}
@@ -101,7 +101,6 @@ proc tile(gogh: ptr Gogh) =
 
     let output = outputs[0]
     let maxSize = output[].size()
-    echo maxSize.x, ' ', maxSize.y
     surfaces[0].resize(
       point(int32(maxSize.x.float - borderSpace), int32(maxSize.y.float - borderSpace))
     )
@@ -114,7 +113,8 @@ proc tile(gogh: ptr Gogh) =
 
     let masterOutput = masterOutputs[0]
     let masterSize = masterOutput[].size().x.float * 0.6
-
+    
+    # Make the master occupy
     master.resize(
       point(masterSize.int32, int32(masterOutput[].size.y.float - (2f * borderSpace)))
     )
@@ -163,5 +163,8 @@ proc createObjectRequest(
   elif objectType == LKeyboard:
     debug "gogh: got request to create new keyboard"
     {.emit: "return new `GoghKeyboard`(`params`);".}
+  elif objectType == LPointer:
+    debug "gogh: got request to create new pointer/cursor"
+    {.emit: "return new `GoghPointer`(`params`);".}
 
   return nil
