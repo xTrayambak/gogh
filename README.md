@@ -3,7 +3,7 @@ Gogh is a Wayland compositor written in [Nim](https://nim-lang.org) using the [L
 It aims to be a close replacement for Hyprland, apart from the layout.
 
 # The Design Philosophy
-Each window/app gets its own workspace. Their subsurfaces are floating, just as intended. This is mostly because that's how my current workflow is anyways.
+Gogh uses a master-stack layout. There isn't a very concrete "design philosophy" yet as my workflow keeps changing. :P
 
 # Why?
 I wanted to contribute to Hyprland but I don't really understand how the codebase works (I have no clue if it's actually awful, like some folks have told me or it's just skill issue on my part), so I decided to write a Wayland compositor in a language I'm very confident with, that being Nim.
